@@ -5,8 +5,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Nav from './components/Nav'
 import Home from './components/Home'
-import About from './components/About'
-import Sellers from './components/Sellers';
+import Seller from './components/Seller';
+import AllProducts from './components/products/AllProducts';
+import RegisterUser from './components/users/RegisterUser';
 
 
 function App() {
@@ -16,8 +17,9 @@ function App() {
        
        <Routes>
          <Route path="/" element={<Home/>}/>
-         <Route path="/about" element={<About/>}/>
-         <Route path="/sellers" element={<Sellers/>}/>
+         <Route path="/sellers/:id" element={<Seller/>}/>
+         <Route path="/products" element={<AllProducts/>}/>
+         <Route path="/register" element={<RegisterUser/>}/>
        </Routes>
       
     </Router>

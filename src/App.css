@@ -66,9 +66,9 @@
 }
 
 .sellersHeader{
-background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.fineartamerica.com/images-medium-large-5/2-tropical-fruits-james-mingo.jpg");
+background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.squarespace-cdn.com/content/v1/57e170f0c534a5faba57b44d/1553722970576-F1ITNT4SI7OOGZM0LKOA/Papaya.jpg?format=1000w");
 background-size: cover;
 background-repeat: no-repeat;
 width: 100%;
-height: 400px;
+height: 300px;
 }

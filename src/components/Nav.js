@@ -34,13 +34,13 @@ function Nav(){
                     </a>
                     </li>
                     <li>
-                    <a href="/sellers" className="nav-link text-white">
+                    <a href="/products" className="nav-link text-white">
                     <svg className="bi d-block mx-auto mb-1" width="24" height="24"><GiFarmer size={25}/></svg>
-                        Sellers
+                        Products
                     </a>
                     </li>
                     <li>
-                    <a href="#" className="nav-link text-white">
+                    <a href="/register" className="nav-link text-white">
                     <svg className="bi d-block mx-auto mb-1" width="24" height="24"><AiOutlineUser size={25}/></svg>
                         User
                     </a>
