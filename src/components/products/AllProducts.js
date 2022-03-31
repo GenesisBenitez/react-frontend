@@ -4,15 +4,15 @@ import {GiFarmer} from 'react-icons/gi'
 import { Link } from "react-router-dom";
 
 function AllProducts(){
-    const cardStyle = {height: "200px"};
+    const cardStyle = {height: "250px"};
     const [products, setProducts] = useState([]);
     const getData = () =>{
 
     
-    axios.get("http://localhost:8080/products/getAllProductInformation")
+    axios.get("http://localhost:8080/products/getAllProductInformation", {withCredentials:true})
     .then((response)=>{
         console.log(response.data);
-        setProducts(response.data);
+        setProducts(response.data.products);
     })
 };
 useEffect(() => getData(), []);
@@ -38,8 +38,8 @@ useEffect(() => getData(), []);
                             
                                 <small className="d-block">{product.name}</small>
                                 <small className="d-block">{product.description}</small>
-                                {/* <small className="d-block">{seller.city}, <span className="fw-bold">{seller.state}</span></small>
-                                <small className="d-block">{seller.country}</small> */}
+                                <small className="d-block">{product.quantity}<span className="text-danger"> left</span></small>
+                                <small className="d-block"><span className="text-success fw-bold">$</span>{product.price}</small>
                             </div>
                         </div>
             

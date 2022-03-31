@@ -8,6 +8,7 @@ import Home from './components/Home'
 import Seller from './components/Seller';
 import AllProducts from './components/products/AllProducts';
 import RegisterUser from './components/users/RegisterUser';
+import Login from './components/auth/Login';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
          <Route path="/sellers/:id" element={<Seller/>}/>
          <Route path="/products" element={<AllProducts/>}/>
          <Route path="/register" element={<RegisterUser/>}/>
+         <Route path="/login" element={<Login/>}/>
        </Routes>
       
     </Router>

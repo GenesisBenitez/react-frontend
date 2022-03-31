@@ -40,9 +40,9 @@ function Nav(){
                     </a>
                     </li>
                     <li>
-                    <a href="/register" className="nav-link text-white">
+                    <a href="/login" className="nav-link text-white">
                     <svg className="bi d-block mx-auto mb-1" width="24" height="24"><AiOutlineUser size={25}/></svg>
-                        User
+                        Login
                     </a>
                     </li>
                 </ul>
