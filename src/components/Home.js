@@ -7,7 +7,9 @@ function Home(){
     })
     return(
         <div>
-            <h1>Home</h1>
+            <header className="sellersHeader d-flex align-items-center justify-content-center">
+                <h1 className=" display-6 text-center text-light">Welcome to the Farmer Seller Center</h1>
+            </header>
             
         </div>
     )

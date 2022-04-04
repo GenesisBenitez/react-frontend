@@ -5,10 +5,21 @@ import axios from 'axios'
 import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 
-function Nav({userId, username}){
+function Nav({userId, username, loggedIn}){
     const mainIconStyle = {color: "#80b51c"}
    
-
+    let userLink;
+    if(loggedIn){
+        userLink = <Link to={`/profilePage/${userId}`} className="nav-link text-white">
+                    <svg className="bi d-block mx-auto mb-1" width="24" height="24"><AiOutlineUser size={25}/></svg>
+                        <span style={mainIconStyle}>{username}</span>
+                    </Link>
+    }else{
+        userLink = <Link to={`/login`} className="nav-link text-white">
+                    <svg className="bi d-block mx-auto mb-1" width="24" height="24"><AiOutlineUser size={25}/></svg>
+                        <span style={mainIconStyle}>Login</span>
+                    </Link>
+    }
     return(
 
     <div>
@@ -46,11 +57,15 @@ function Nav({userId, username}){
                         Products
                     </a>
                     </li>
+                   
                     <li>
-                    <Link to={`/profilePage/${userId}`} className="nav-link text-white">
-                    <svg className="bi d-block mx-auto mb-1" width="24" height="24"><AiOutlineUser size={25}/></svg>
-                        <span style={mainIconStyle}>{username}</span>
+                    <Link to={`/cart/${userId}`} className="nav-link text-white">
+                    <svg className="bi d-block mx-auto mb-1" width="24" height="24"><AiOutlineShoppingCart size={25}/></svg>
+                        Cart
                     </Link>
+                    </li>
+                    <li>
+                        {userLink}
                     </li>
                 </ul>
                 </div>
