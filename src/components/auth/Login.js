@@ -1,18 +1,21 @@
 import {useState} from 'react';
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom'
 
 function Login(){
+const [username, setUsername] = useState("");
+const [password, setPassword] = useState("");
+let navigate = useNavigate();
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        axios.post("http://localhost:8080/login", {
-            username: username,
-            password: password
-        },{withCredentials: true}).then(function(response){
+const handleSubmit = (e) => {
+    e.preventDefault();
+    axios.post("http://localhost:8080/login", {
+        username: username,
+        password: password
+        },{withCredentials: true})
+        .then(function(response){
             console.log(response);
+            window.location = "/products"
         }).catch(function(error){
             console.log(error);
         })

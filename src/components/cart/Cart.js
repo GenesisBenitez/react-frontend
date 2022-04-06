@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {GiFarmer} from 'react-icons/gi'
-import { Link, useParams } from "react-router-dom";
-import {FaTrash} from 'react-icons/fa'
+import { useParams } from "react-router-dom";
+import {FaTrash} from 'react-icons/fa';
+import { useSnackbar } from "material-ui-snackbar-provider";
+import {ImNotification} from 'react-icons/im'
+
 
 function Cart({userId, username, loggedIn}){
     const cardStyle = {height: "200px"};
@@ -10,7 +12,7 @@ function Cart({userId, username, loggedIn}){
     const [loggedInUserId, setLoggedInUserId]= useState(id);
     const [cartItems, setCartItems] = useState([]);
     const [totalForCart, setTotalForCart] = useState(0);
-  
+    const snackbar = useSnackbar();
     const getData = () =>{
 
     setCartItems([]);
@@ -30,8 +32,27 @@ const getTotalForCart = ()=>{
         console.log(error)
     })
 }
+
 useEffect(() => getData(), []);
 useEffect(() => getTotalForCart(), []);
+
+let cartItemsHtml;
+if(cartItems.length == 0){
+    cartItemsHtml = 
+    <div className="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10 d-flex justify-content-center mt-4">
+    <div class="alert alert-primary d-flex align-items-center mt-4" role="alert">
+    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><ImNotification/></svg>
+    <div>
+      There no items in your cart
+    </div>
+  </div>
+  </div>
+}else{
+   cartItemsHtml=
+   <div className="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10 d-flex justify-content-end">
+   <h3 className="display-6 mt-4">Total: ${totalForCart}</h3>
+   </div>
+}
 
 console.log(userId)
     return(
@@ -70,6 +91,7 @@ console.log(userId)
                                             axios.delete(`http://localhost:8080/cart/deleteCartItem/${cartItem.id}`)
                                             .then(function(response){
                                                 console.log(response);
+                                                snackbar.showMessage("Item successfully removed from cart.")
                                                 getData();
                                                 getTotalForCart();
                                             }).catch(function(error){
@@ -86,9 +108,9 @@ console.log(userId)
                     </div>
                         
                 ))}
-                <div className="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10 d-flex justify-content-end">
-                    <h3 className="display-6 mt-4">Total: ${totalForCart}</h3>
-                </div>
+                
+                    {cartItemsHtml}
+                
             </div>
             
         </div>
