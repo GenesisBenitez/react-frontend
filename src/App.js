@@ -8,13 +8,13 @@ import Home from './components/Home';
 import Seller from './components/Seller';
 import AllProducts from './components/products/AllProducts';
 import RegisterUser from './components/users/RegisterUser';
-import AddUserAddress from './components/users/AddUserAddress';
 import Login from './components/auth/Login';
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 import UserPage from './components/users/UserPage';
 import Cart from './components/cart/Cart';
 import { SnackbarProvider } from 'material-ui-snackbar-provider'
+import Orders from './components/orders/Orders';
 
 
 function App() {
@@ -35,18 +35,18 @@ function App() {
     useEffect(()=>getUser(), []);
     return (
   <Router>
-
+<SnackbarProvider SnackbarProps={{autoHideDuration:3000}}>
     <Nav userId={userId} username={username} loggedIn={loggedIn}/>
-    <SnackbarProvider SnackbarProps={{autoHideDuration:3000}}>
+    
     <Routes>
     <Route path="/" element={<Home/>}/>
     <Route path="/sellers/:id" element={<Seller/>}/>
     <Route path="/products" element={<AllProducts userId={userId} username={username} loggedIn={loggedIn}/>}/>
     <Route path="/register" element={<RegisterUser/>}/>
-    <Route path="/AddUserAddress" element={<AddUserAddress/>}/>
     <Route path="/login" element={<Login/>}/>
     <Route path="/profilePage/:id" element={<UserPage userId={userId} username={username}/>}/>
     <Route path="/cart/:id" element={<Cart userId={userId} username={username} loggedIn={loggedIn}/>}/>
+    <Route path="/orders/:id" element={<Orders userId={userId} username={username} loggedIn={loggedIn}/>}/>
 
   </Routes>
     </SnackbarProvider>
