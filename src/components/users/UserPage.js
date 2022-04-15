@@ -1,263 +1,295 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {useParams} from 'react-router-dom';
+import {useParams, Link} from 'react-router-dom';
 import { FaUserCircle , FaCcMastercard, FaCcVisa, FaCcDiscover, FaCcAmex } from 'react-icons/fa';
 import DatePicker from 'react-date-picker';
 import { useSnackbar } from 'material-ui-snackbar-provider';
-
+import {GrAdd} from 'react-icons/gr';
 function UserPage({userId,username}){
-    const mainIconStyle = {color: "#80b51c"}
-    let {id} = useParams();
+ const mainIconStyle = {color: "#80b51c"}
+ const firstStyle={height: "200px", width: "100%"}
+ const cardStyle = {height: "140px"};
 
-    const snackbar = useSnackbar();
-    const [loggedInUserId, setLoggedInUserId] = useState(id);
-    const [user, setUser] = useState([]);
-    const [userAddress, setUserAddress] = useState([]);
-    const [userPayment, setUserPayment] = useState([]);
-    const [productCategories, setProductCateories] = useState([]);
+ let {id} = useParams();
+
+ const snackbar = useSnackbar();
+ const [loggedInUserId, setLoggedInUserId] = useState(id);
+ const [user, setUser] = useState([]);
+ const [userAddress, setUserAddress] = useState([]);
+ const [userPayment, setUserPayment] = useState([]);
+ const [productCategories, setProductCateories] = useState([]);
 
  //update address fields
 
-    const [street_address, setStreet_address] = useState("");
-    const [city, setCity] = useState("");
-    const [postal_code, setPostal_code] = useState("");
-    const [country, setCountry] = useState("");
-    const [state, setState] = useState("");
+ const [street_address, setStreet_address] = useState("");
+ const [city, setCity] = useState("");
+ const [postal_code, setPostal_code] = useState("");
+ const [country, setCountry] = useState("");
+ const [state, setState] = useState("");
  
  //update payment fields
 
-    const [payment_type, setPayment_type] = useState("");
-    const [account_number, setAccount_number] = useState("");
-    const [expiry, setExpiry] = useState("");
+ const [payment_type, setPayment_type] = useState("");
+ const [account_number, setAccount_number] = useState("");
+ const [expiry, setExpiry] = useState("");
  
  //add product fields
 
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [category_id, setCategory_id] = useState("");
-    const [price, setPrice] = useState("");
-    const [quantity, setQuantity] = useState("");
-    const [product_img, setProduct_img] = useState("");
+ const [name, setName] = useState("");
+ const [description, setDescription] = useState("");
+ const [category_id, setCategory_id] = useState("");
+ const [price, setPrice] = useState("");
+ const [quantity, setQuantity] = useState("");
+ const [product_img, setProduct_img] = useState("");
 
  //add product category fields
 
-    const [productCategoryName, setProductCategoryName] = useState("");
-    const [productCategoryDescription, setProductCategoryDescription] = useState("");
+ const [productCategoryName, setProductCategoryName] = useState("");
+ const [productCategoryDescription, setProductCategoryDescription] = useState("");
 
-    const getUser = () =>{
-        axios.get(`http://localhost:8080/users/getUser/${loggedInUserId}` , {withCredentials: true})
-        .then((response)=>{
-        console.log(response.data);
-        setUser(response.data[0]);
-        }).catch(function(error){
-        console.log(error);
-        })
-    };
-    const getUserAddress = () =>{
-        axios.get(`http://localhost:8080/users/getUserAddress/${loggedInUserId}` , {withCredentials: true})
-        .then((response)=>{
-        console.log(response.data);
-        setUserAddress(response.data);
-        }).catch(function(error){
-        console.log(error);
-        })
-    };
+ const getUser = () =>{
+ axios.get(`http://localhost:8080/users/getUser/${loggedInUserId}` , {withCredentials: true})
+ .then((response)=>{
+ console.log(response.data);
+ setUser(response.data[0]);
+ }).catch(function(error){
+ console.log(error);
+ })
+ };
+ const getUserAddress = () =>{
+ axios.get(`http://localhost:8080/users/getUserAddress/${loggedInUserId}` , {withCredentials: true})
+ .then((response)=>{
+ console.log(response.data);
+ setUserAddress(response.data);
+ }).catch(function(error){
+ console.log(error);
+ })
+ };
 
-    const getUserPayment = () =>{
-        axios.get(`http://localhost:8080/users/getUserPayment/${loggedInUserId}` , {withCredentials: true})
-        .then((response)=>{
-        console.log(response.data);
-        setUserPayment(response.data);
-        }).catch(function(error){
-        console.log(error);
-        })
-    };
+ const getUserPayment = () =>{
+ axios.get(`http://localhost:8080/users/getUserPayment/${loggedInUserId}` , {withCredentials: true})
+ .then((response)=>{
+ console.log(response.data);
+ setUserPayment(response.data);
+ }).catch(function(error){
+ console.log(error);
+ })
+ };
 
-    const getProductCategories = () =>{
-        axios.get(`http://localhost:8080/products/getAllProductCategories` , {withCredentials: true})
-        .then((response)=>{
-        console.log(response.data);
-        setProductCateories(response.data);
-        }).catch(function(error){
-        console.log(error);
-        })
-    };
+ const getProductCategories = () =>{
+ axios.get(`http://localhost:8080/products/getAllProductCategories` , {withCredentials: true})
+ .then((response)=>{
+ console.log(response.data);
+ setProductCateories(response.data);
+ }).catch(function(error){
+ console.log(error);
+ })
+ };
  function convertTime(time){
-    var newTime = new Date(time);
-    const realTime = newTime.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric'})
-    return realTime;
-    }
-    useEffect(()=> getUser(), []);
-    useEffect(()=> getUserAddress(), []);
-    useEffect(()=> getUserPayment(), []);
-    useEffect(()=> getProductCategories(), []);
+ var newTime = new Date(time);
+ const realTime = newTime.toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric'})
+ return realTime;
+ }
+ useEffect(()=> getUser(), []);
+ useEffect(()=> getUserAddress(), []);
+ useEffect(()=> getUserPayment(), []);
+ useEffect(()=> getProductCategories(), []);
 
-    const handleAddressSubmit = (e) =>{
-    e.preventDefault();
-    axios.post("http://localhost:8080/users/registerUserAddress", {
-        user_id: loggedInUserId,
-        street_address: street_address,
-        city: city,
-        postal_code: postal_code,
-        country: country,
-        state: state
-    }).then(function(response){
-    console.log(response);
-    window.location = `/profilepage/${loggedInUserId}`;
-    }).catch(function(error){
-    console.log(error);
-    }) 
+ const handleAddressSubmit = (e) =>{
+ e.preventDefault();
+ axios.post("http://localhost:8080/users/registerUserAddress", {
+ user_id: loggedInUserId,
+ street_address: street_address,
+ city: city,
+ postal_code: postal_code,
+ country: country,
+ state: state
+ }).then(function(response){
+ console.log(response);
+ window.location = `/profilepage/${loggedInUserId}`;
+
+ }).catch(function(error){
+ console.log(error);
+ })
+ 
  }
 
-    const handlePaymentSubmit = (e) =>{
-    e.preventDefault();
-    console.log({
-        user_id: loggedInUserId,
-        payment_type: payment_type,
-        account_number: account_number,
-        expiry: expiry
-    });
-    axios.post("http://localhost:8080/users/registerUserPayment", {
-        user_id: loggedInUserId,
-        payment_type: payment_type,
-        account_number: account_number,
-        expiry: expiry
-    }).then(function(response){
-    console.log(response);
-    window.location = `/profilepage/${loggedInUserId}`;
-    }).catch(function(error){
-    console.log(error);
-    })
+ const handlePaymentSubmit = (e) =>{
+ e.preventDefault();
+ console.log({
+ user_id: loggedInUserId,
+ payment_type: payment_type,
+ account_number: account_number,
+ expiry: expiry
+ });
+ axios.post("http://localhost:8080/users/registerUserPayment", {
+ user_id: loggedInUserId,
+ payment_type: payment_type,
+ account_number: account_number,
+ expiry: expiry
+ }).then(function(response){
+ console.log(response);
+ window.location = `/profilepage/${loggedInUserId}`;
+
+ }).catch(function(error){
+ console.log(error);
+ })
+ 
  }
 
-    const handleAddProductSubmit = (e) =>{
-    e.preventDefault();
-    console.log({
-        name: name,
-        description: description,
-        category_id: category_id,
-        price: price,
-        quantity: quantity,
-        product_img: product_img
-    });
-    axios.post("http://localhost:8080/products/addProduct", {
-        name: name,
-        description: description,
-        category_id: category_id,
-        price: price,
-        quantity: quantity,
-        product_img: product_img
-    }).then(function(response){
-    console.log(response);
-    snackbar.showMessage('Product Successfully added');
-    window.location = "/products"
-     }).catch(function(error){
-    console.log(error);
-        })
-    }
+ const handleAddProductSubmit = (e) =>{
+ e.preventDefault();
+ console.log({
+ name: name,
+ description: description,
+ category_id: category_id,
+ price: price,
+ quantity: quantity,
+ product_img: product_img
+ });
+ axios.post("http://localhost:8080/products/addProduct", {
+ name: name,
+ description: description,
+ category_id: category_id,
+ price: price,
+ quantity: quantity,
+ product_img: product_img
+ }).then(function(response){
+ console.log(response);
+ snackbar.showMessage('Product Successfully added');
+ window.location = "/products"
 
-    const handleAddProductCategorySubmit = (e) =>{
-    e.preventDefault();
-    console.log({
-        name: productCategoryName,
-        description: productCategoryDescription
-    });
-    axios.post("http://localhost:8080/products/addProductCategory", {
-        name: productCategoryName,
-        description: productCategoryDescription
-    }).then(function(response){
-    console.log(response);
-    snackbar.showMessage('Product Category Successfully added');
-    window.location = "/products"
-    }).catch(function(error){
-    console.log(error);
-        })
-    }
+ }).catch(function(error){
+ console.log(error);
+ })
+ 
+ }
+
+ const handleAddProductCategorySubmit = (e) =>{
+ e.preventDefault();
+ console.log({
+ name: productCategoryName,
+ description: productCategoryDescription
+ });
+ axios.post("http://localhost:8080/products/addProductCategory", {
+ name: productCategoryName,
+ description: productCategoryDescription
+ }).then(function(response){
+ console.log(response);
+ snackbar.showMessage('Product Category Successfully added');
+ window.location = "/products"
+
+ }).catch(function(error){
+ console.log(error);
+ })
+ 
+ }
  function disguiseCardNumber(cardNum){
-    return cardNum.replace(/\d(?=(?:\D*\d){4})/g, "*");
-    }
+ return cardNum.replace(/\d(?=(?:\D*\d){4})/g, "*");
+ }
+ function getLastFourDigits(cardNum){
+ return cardNum.substr(cardNum.length - 4);
+ }
+ function getCardIcon(card){
+ if(card == "Visa"){
+ return <FaCcVisa size={100}/>
+ }else if(card == "Discover"){
+ return <FaCcDiscover size={100}/>
+ }else if(card == "MasterCard"){
+ return <FaCcMastercard size={100}/>
+ }else if(card == "American Express"){
+ return <FaCcAmex size={100}/>
+ }
+ }
  //conditional html for user address
-    let userAddressInfo;
-    if(userAddress.length == 0){
-        userAddressInfo = <div> 
-        <div className="mt-4">
-        </div>
-         <small className="d-block">We do not have an address for you yet</small>
-         <button type="button" className="btn btn-dark mt-3" data-bs-toggle="modal" data-bs-target="#addressmodal">
-            Update address
-        </button>
-    </div>
+ let userAddressInfo;
+ if(userAddress.length == 0){
+ userAddressInfo = <div> 
+ <div className="mt-4">
+ </div>
 
-    }else{
-         userAddressInfo = <div> 
-         <div className="mt-4">
-            <small>Address:</small>
-        </div>
-        <small className="d-block mt-2">{userAddress[0].street_address}</small>
-        <small>{userAddress[0].city}, {userAddress[0].state} {userAddress[0].postal_code}</small>
-        <small className="d-block">{userAddress[0].country}</small>
-        </div>
-    }
+ <small className="d-block">We do not have an address for you yet</small>
+ <button type="button" className="btn btn-outline-dark mt-4" data-bs-toggle="modal" data-bs-target="#addressmodal">
+ Update address
+ </button>
+ </div>
+
+ }else{
+ userAddressInfo = <div> 
+ <div className="mt-4">
+ <small>Address:</small>
+ </div>
+ <small className="d-block mt-2">{userAddress[0].street_address}</small>
+ <small>{userAddress[0].city}, {userAddress[0].state} {userAddress[0].postal_code}</small>
+ <small className="d-block">{userAddress[0].country}</small>
+ </div>
+ }
 
  //conditional html for user payment
-    let userPaymentInfo;
-    if(userPayment.length == 0){
-        userPaymentInfo = <div> 
-        <div className="mt-4">
-        </div>
-            <small className="d-block">We do not have any payment information for you</small>
-            <button type="button" className="btn btn-dark mt-3" data-bs-toggle="modal" data-bs-target="#paymentmodal">
-            Update Payment
-            </button>
-        </div>
+ let userPaymentInfo;
+ if(userPayment.length == 0){
+ userPaymentInfo = <div> 
+ <div className="mt-4">
+ </div>
  
-    }else{
-    userPaymentInfo = 
-        <div className="row justify-content-center"> 
-            {userPayment.filter(payment => payment.payment_type === "MasterCard").map((payment, i)=>(
-        <div className="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 mt-4 mr-4">
-            <FaCcMastercard size={50}/>
-            <small className="d-block">{disguiseCardNumber(payment.account_number)}</small>
-            <small className="d-block">{payment.expiry}</small>
-        </div>
-    ))}
-        {userPayment.filter(payment => payment.payment_type === "Visa").map((payment, i)=>(
-        <div className="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 mt-4 mr-4">
-            <FaCcVisa size={50}/>
-            <small className="d-block">{disguiseCardNumber(payment.account_number)}</small>
-            <small className="d-block">{payment.expiry}</small>
-        </div>
-    ))}
-        {userPayment.filter(payment => payment.payment_type === "Discover").map((payment, i)=>(
-        <div className="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 mt-4 mr-4">
-            <FaCcDiscover size={50}/>
-            <small className="d-block">{disguiseCardNumber(payment.account_number)}</small>
-            <small className="d-block">{payment.expiry}</small>
-        </div>
-    ))}
-        {userPayment.filter(payment => payment.payment_type === "American Express").map((payment, i)=>(
-        <div className="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 mt-4 mr-4">
-            <FaCcAmex size={50}/>
-            <small className="d-block">{disguiseCardNumber(payment.account_number)}</small>
-            <small className="d-block">{payment.expiry}</small>
-        </div>
-    ))}
-    </div>
+ <small className="d-block">We do not have any payment information for you</small>
+ <button type="button" className="btn btn-outline-dark mt-3" data-bs-toggle="modal" data-bs-target="#paymentmodal">
+ Update Payment
+ </button>
+ </div>
+ 
+ }else{
+ userPaymentInfo = 
+ <div className="row"> 
+ {userPayment.map((payment, i)=>(
+ <div className="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-12 mt-2">
+ <div class="card border-light w-85 p-3" style={cardStyle}>
+ <div className="row">
+ <div className="col-4 col-sm-4 col-md-4 col-lg-6 col-xl-4" align="center">
+ {getCardIcon(payment.payment_type)}
+ </div>
+ <div className="col-8 col-sm-8 col-md-8 col-lg-6 col-xl-6">
+ <div class="">
+ <div className="h-25">
+ 
+ </div>
+ <div className="h-75 mt-2">
+ <small className="d-block">Card ending in: {getLastFourDigits(payment.account_number)}</small>
+ <small className="d-block">{payment.expiry}</small>
+ </div>
+ </div> 
+ </div>
+ </div>
+ </div>
+ </div> 
+ ))}
+ </div>
  }
  
-    let addProductButton;
-    if(user.admin != null && user.admin == 'Y'){
-        addProductButton = <div>
-        <button type="button" className="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addproductcategoryModal">
-            Add Product Category
-        </button>
-        <button type="button" className="btn btn-dark float-end" data-bs-toggle="modal" data-bs-target="#addproductModal">
-            Add Product
-        </button>
-    </div>
-        }
-    ///////////////////////COUNTRY LIST ARRAY//////////////////////
-    const countryList = [
+ let addProductButton;
+ if(user.admin != null && user.admin == 'Y'){
+ addProductButton = 
+ <div className="row mt-3">
+ <div className="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-6">
+ <button className="btn btn-outline-dark mt-2 mr-2" data-bs-toggle="modal" data-bs-target="#addproductcategoryModal">
+ <span style={mainIconStyle}>+</span> Category
+ </button>
+ </div>
+ <div className="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-6">
+ <button type="button" className="btn btn-outline-dark mt-2" data-bs-toggle="modal" data-bs-target="#addproductModal">
+ <span style={mainIconStyle}>+</span> Product
+ </button>
+ </div>
+ </div>
+ }
+ function getUserRole(admin){
+ if(user.admin != null && user.admin == 'Y'){
+ return "Admin";
+ }else{
+ return "User"
+ }
+ }
+ const countryList = [
  "Afghanistan",
  "Albania",
  "Algeria",
@@ -507,194 +539,239 @@ function UserPage({userId,username}){
  "Zambia",
  "Zimbabwe",
  "Åland Islands"
-    ];
-
-    return(
-        <div className="row justify-content-center">
-            <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                <h4 className="display-5 mt-4">Account</h4>
-                    {addProductButton} 
-        </div>
-        <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 mt-4" align="center">
-            <FaUserCircle size={100} className="mt-4" />
-            <h4 className="display-6">{user.username}</h4>
-        </div>
-        <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 mt-4" align='center'>
-            <h4 className="display-6 mt-4">{user.first_name} {user.last_name}</h4>
-            <p>Member since {convertTime(user.created_at)} </p>
-            <h5 className="lead mt-4">Personal Information:</h5>
-                {userAddressInfo}
-        </div>
-        <div className="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 mt-3" align="center">
-            <h2 className="display-6 mt-4">Payment Information</h2>
-                {userPaymentInfo}
-        </div>
-
-{/* //////////////////////////////MODAL FOR ADDRESS/////////////////////////////////////// */}
-    <div class="modal fade" id="addressmodal" tabindex="-1" aria-labelledby="addressmodalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-    <div class="modal-body">
-        <form onSubmit={handleAddressSubmit}>
-            <div className="row justify-content-center mt-4">
-                <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center">
-                    <h4 className="display-6">Update Address</h4>
-                <div className="mb-3 mt-4">
-                    <label htmlFor="street_address" className="form-label">Street Address</label>
-                    <input type="text" className="form-control" value={street_address} onChange={(e)=> setStreet_address(e.target.value)}/>
-                </div>
-            <div className="mb-3 mt-4">
-                <label htmlFor="city" className="form-label">City</label>
-                <input type="text" className="form-control" value={city} onChange={(e)=> setCity(e.target.value)}/>
-            </div>
-            <div className="mb-3 mt-4">
-                <label htmlFor="state" className="form-label">State</label>
-                <input type="text" className="form-control" value={state} onChange={(e)=> setState(e.target.value)}/>
-            </div>
-            <div className="mb-3 mt-4">
-                <label htmlFor="postal_code" className="form-label">Postal Code</label>
-                <input type="text" className="form-control" value={postal_code} onChange={(e)=> setPostal_code(e.target.value)}/>
-            </div>
-            <div className="mb-3 mt-4">
-                <label htmlFor="country" className="form-label">Country</label>
-                <select required className="form-select form-inline" aria-label="Default select example" value={country} onChange={(e)=> setCountry(e.target.value)}>
-                    {countryList.map((country, i)=>(
-                <option value={country}>{country}</option>
-                        ))}
-                </select>
-            </div>
-                    <button className="btn btn-dark mt-4">Save</button>
-                </div>
-            </div>
-        </form>
-    </div>
+ ];
+ return(
+ <div className="row justify-content-center">
+ <div >
  
-            </div>
-        </div>
+ <div className="row justify-content-center">
+ 
+ <div className="col-12 col-sm-8 col-md-6 col-lg-8 col-xl-10">
+ <div className="row container mt-4">
+ <div className="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10">
+ <h4 className="display-6">Account</h4>
+ <small>Customize your profile and update your account information</small>
+ <nav aria-label="breadcrumb">
+ <ol class="breadcrumb mt-3">
+ <li class="breadcrumb-item active" aria-current="page"><span className="text-success fw-bold">{user.username}</span></li>
+ </ol>
+ </nav>
+
+ </div>
+ </div>
+ <div class="row mt-4 justify-content-center">
+ <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4 ">
+ <div class="container-fluid">
+ <div class="d-flex justify-content-center" style={firstStyle}>
+ <div class="col-lg-10 col-xl-7">
+ <FaUserCircle size={100} className="mw-100 mh-100" />
+ </div>
+ </div>
+ </div>
+ </div>
+ <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 ">
+ <div class="container">
+ <div class="row justify-content-end">
+ <div class="col-xs-12 col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+ <h1 class="display-6">{user.first_name} {user.last_name}</h1>
+ <small class="fw-bold">
+ Member since {convertTime(user.created_at)} 
+ </small>
+ <small class="d-block mt-2">
+ Role: <span className="fw-bold">{getUserRole(user.admin)}</span> 
+ </small>
+ {addProductButton}
+ </div>
+ </div>
+ </div>
+ </div>
+ <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4 ">
+ <div class="container">
+ <small class="d-block lead">
+ Personal Information:
+ </small>
+ <small class="d-block">
+ {userAddressInfo}
+ </small>
+ </div>
+ </div>
+ <div class="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 ">
+ <div class="container">
+ <div class="row justify-content-end">
+ <div class="col-xs-12 col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
+ <small class="d-block lead">
+ Payment Information:
+ </small>
+ {userPaymentInfo}
+ </div>
+ </div>
+ </div>
+ </div>
  </div>
 
-{/* //////////////////////////////MODAL FOR PAYMENT/////////////////////////////////////// */}
-    <div class="modal fade" id="paymentmodal" tabindex="-1" aria-labelledby="addressmodalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-    <div class="modal-body">
-        <form onSubmit={handlePaymentSubmit}>
-            <div className="row justify-content-center mt-4">
-            <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center">
-                <h4 className="display-6">Update Payment</h4>
-            <div className="mb-3 mt-4">
-                <label htmlFor="street_address" className="form-label">Payment Type</label>
-                <select required className="form-select form-inline" aria-label="Default select example" value={payment_type} onChange={(e)=> setPayment_type(e.target.value)}>
-                    <option value="Visa">Visa</option>
-                    <option value="MasterCard">MasterCard</option>
-                    <option value="American Express">American Express</option>
-                    <option value="Discover">Discover</option>
-                </select> 
-            </div>
-        <div className="mb-3 mt-4">
-            <label htmlFor="city" className="form-label">Account Number</label>
-            <input type="text" className="form-control" value={account_number} onChange={(e)=> setAccount_number(e.target.value)}/>
-        </div>
-        <div className="mb-3 mt-4">
-            <label htmlFor="state" className="form-label">Expiry</label>
-            <input type="text" className="form-control" value={expiry} onChange={(e)=> setExpiry(e.target.value)}/>
-        </div>
-            <button className="btn btn-dark mt-4">Save</button>
-            </div>
-            </div>
-        </form>
-    </div>
- 
-        </div>
  </div>
-    </div>
+ </div>
+ </div>
 
-{/* //////////////////////////////MODAL FOR ADDING PRODUCT///////////////////////////////// */}
-    <div class="modal fade" id="addproductModal" tabindex="-1" aria-labelledby="addressmodalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-        <div class="modal-body">
-        <form onSubmit={handleAddProductSubmit}>
-        <div className="row justify-content-center mt-4">
-        <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center">
-            <h4 className="display-6">Add Product</h4>
-        <div className="mb-3 mt-4">
-            <label htmlFor="street_address" className="form-label">Name</label>
-            <input type="text" className="form-control" value={name} onChange={(e)=> setName(e.target.value)}/>
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-            <textarea class="form-control" value={description} onChange={(e)=> setDescription(e.target.value)} rows="3"></textarea>
-        </div>
-        <div class="mb-3">
-            <label htmlFor="country" className="form-label">Product Category</label>
-            <select required className="form-select form-inline" aria-label="Default select example" value={category_id} onChange={(e)=> setCategory_id(e.target.value)}>
-                {productCategories.map((productCategory, i)=>(
-            <option value={productCategory.id}>{productCategory.name}</option>
-                ))}
-            </select>
-        </div>
-        <div className="mb-3 mt-4">
-            <label htmlFor="street_address" className="form-label">Price</label>
-            <input type="text" className="form-control" value={price} onChange={(e)=> setPrice(e.target.value)}/>
-        </div>
-        <div className="mb-3 mt-4">
-            <label htmlFor="street_address" className="form-label">Quantity</label>
-            <input type="text" className="form-control" value={quantity} onChange={(e)=> setQuantity(e.target.value)}/>
-        </div>
-        <div class="mb-3">
-            <label for="exampleFormControlTextarea1" class="form-label">Product Image</label>
-            <textarea class="form-control" value={product_img} onChange={(e)=> setProduct_img(e.target.value)} rows="3"></textarea>
-        </div>
-            <button className="btn btn-dark mt-4">Save</button>
-            </div>
-            </div>
-            </form>
-        </div>
+ <div class="modal fade" id="addressmodal" tabindex="-1" aria-labelledby="addressmodalLabel" aria-hidden="true">
+ <div class="modal-dialog modal-lg">
+ <div class="modal-content">
+ <div class="modal-header">
+ <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+ </div>
+ <div class="modal-body">
+ <form onSubmit={handleAddressSubmit}>
+ <div className="row justify-content-center mt-4">
+ <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center">
+ <h4 className="display-6">Update Address</h4>
+ <div className="mb-3 mt-4">
+ <label htmlFor="street_address" className="form-label">Street Address</label>
+ <input type="text" className="form-control" value={street_address} onChange={(e)=> setStreet_address(e.target.value)}/>
+ </div>
+ <div className="mb-3 mt-4">
+ <label htmlFor="city" className="form-label">City</label>
+ <input type="text" className="form-control" value={city} onChange={(e)=> setCity(e.target.value)}/>
+ </div>
+ <div className="mb-3 mt-4">
+ <label htmlFor="state" className="form-label">State</label>
+ <input type="text" className="form-control" value={state} onChange={(e)=> setState(e.target.value)}/>
+ </div>
+ <div className="mb-3 mt-4">
+ <label htmlFor="postal_code" className="form-label">Postal Code</label>
+ <input type="text" className="form-control" value={postal_code} onChange={(e)=> setPostal_code(e.target.value)}/>
+ </div>
+ <div className="mb-3 mt-4">
+ <label htmlFor="country" className="form-label">Country</label>
+ <select required className="form-select form-inline" aria-label="Default select example" value={country} onChange={(e)=> setCountry(e.target.value)}>
+ {countryList.map((country, i)=>(
+ <option value={country}>{country}</option>
+ ))}
+ </select>
+ </div>
+ <button className="btn btn-dark mt-4">Save</button>
+ </div>
+ </div>
+ </form>
+ </div>
  
-            </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
 
-{/* ////////////////////////////////MODAL FOR ADDING PRODUCT CATEGORY///////////////////////// */}
-    <div class="modal fade" id="addproductcategoryModal" tabindex="-1" aria-labelledby="addressmodalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-        <div class="modal-body">
-            <form onSubmit={handleAddProductCategorySubmit}>
-            <div className="row justify-content-center mt-4">
-                <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center">
-                    <h4 className="display-6">Add Product Category</h4>
-                <div className="mb-3 mt-4">
-                    <label htmlFor="street_address" className="form-label">Name</label>
-                    <input type="text" className="form-control" value={productCategoryName} onChange={(e)=> setProductCategoryName(e.target.value)}/>
-                </div>
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                    <textarea class="form-control" value={productCategoryDescription} onChange={(e)=> setProductCategoryDescription(e.target.value)} rows="3"></textarea>
-                </div>
+ <div class="modal fade" id="paymentmodal" tabindex="-1" aria-labelledby="addressmodalLabel" aria-hidden="true">
+ <div class="modal-dialog modal-lg">
+ <div class="modal-content">
+ <div class="modal-header">
+ <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+ </div>
+ <div class="modal-body">
+ <form onSubmit={handlePaymentSubmit}>
+ <div className="row justify-content-center mt-4">
+ <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center">
+ <h4 className="display-6">Update Payment</h4>
+ <div className="mb-3 mt-4">
+ <label htmlFor="street_address" className="form-label">Payment Type</label>
+ <select required className="form-select form-inline" aria-label="Default select example" value={payment_type} onChange={(e)=> setPayment_type(e.target.value)}>
+ <option value="Visa">Visa</option>
+ <option value="MasterCard">MasterCard</option>
+ <option value="American Express">American Express</option>
+ <option value="Discover">Discover</option>
+ </select> 
+ </div>
+ <div className="mb-3 mt-4">
+ <label htmlFor="city" className="form-label">Account Number</label>
+ <input type="text" className="form-control" value={account_number} onChange={(e)=> setAccount_number(e.target.value)}/>
+ </div>
+ <div className="mb-3 mt-4">
+ <label htmlFor="state" className="form-label">Expiry</label>
+ <input type="text" className="form-control" value={expiry} onChange={(e)=> setExpiry(e.target.value)}/>
+ </div>
+ <button className="btn btn-dark mt-4">Save</button>
+ </div>
+ </div>
+ </form>
+ </div>
  
-                    <button className="btn btn-dark mt-4">Save</button>
-                </div>
-            </div>
-            </form>
-        </div>
+ </div>
+ </div>
+ </div>
+ <div class="modal fade" id="addproductModal" tabindex="-1" aria-labelledby="addressmodalLabel" aria-hidden="true">
+ <div class="modal-dialog modal-lg">
+ <div class="modal-content">
+ <div class="modal-header">
+ <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+ </div>
+ <div class="modal-body">
+ <form onSubmit={handleAddProductSubmit}>
+ <div className="row justify-content-center mt-4">
+ <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center">
+ <h4 className="display-6">Add Product</h4>
+ <div className="mb-3 mt-4">
+ <label htmlFor="street_address" className="form-label">Name</label>
+ <input type="text" className="form-control" value={name} onChange={(e)=> setName(e.target.value)}/>
+ </div>
+ <div class="mb-3">
+ <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+ <textarea class="form-control" value={description} onChange={(e)=> setDescription(e.target.value)} rows="3"></textarea>
+ </div>
+ <div class="mb-3">
+ <label htmlFor="country" className="form-label">Product Category</label>
+ <select required className="form-select form-inline" aria-label="Default select example" value={category_id} onChange={(e)=> setCategory_id(e.target.value)}>
+ {productCategories.map((productCategory, i)=>(
+ <option value={productCategory.id}>{productCategory.name}</option>
+ ))}
+ </select>
+ </div>
+ <div className="mb-3 mt-4">
+ <label htmlFor="street_address" className="form-label">Price</label>
+ <input type="text" className="form-control" value={price} onChange={(e)=> setPrice(e.target.value)}/>
+ </div>
+ <div className="mb-3 mt-4">
+ <label htmlFor="street_address" className="form-label">Quantity</label>
+ <input type="text" className="form-control" value={quantity} onChange={(e)=> setQuantity(e.target.value)}/>
+ </div>
+ <div class="mb-3">
+ <label for="exampleFormControlTextarea1" class="form-label">Product Image</label>
+ <textarea class="form-control" value={product_img} onChange={(e)=> setProduct_img(e.target.value)} rows="3"></textarea>
+ </div>
+ <button className="btn btn-dark mt-4">Save</button>
+ </div>
+ </div>
+ </form>
+ </div>
  
-        </div>
-        </div>
-    </div>
+ </div>
+ </div>
+ </div>
+ <div class="modal fade" id="addproductcategoryModal" tabindex="-1" aria-labelledby="addressmodalLabel" aria-hidden="true">
+ <div class="modal-dialog modal-lg">
+ <div class="modal-content">
+ <div class="modal-header">
+ <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+ </div>
+ <div class="modal-body">
+ <form onSubmit={handleAddProductCategorySubmit}>
+ <div className="row justify-content-center mt-4">
+ <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8" align="center">
+ <h4 className="display-6">Add Product Category</h4>
+ <div className="mb-3 mt-4">
+ <label htmlFor="street_address" className="form-label">Name</label>
+ <input type="text" className="form-control" value={productCategoryName} onChange={(e)=> setProductCategoryName(e.target.value)}/>
+ </div>
+ <div class="mb-3">
+ <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+ <textarea class="form-control" value={productCategoryDescription} onChange={(e)=> setProductCategoryDescription(e.target.value)} rows="3"></textarea>
+ </div>
+ 
+ <button className="btn btn-dark mt-4">Save</button>
+ </div>
+ </div>
+ </form>
+ </div>
+ 
+ </div>
+ </div>
+ </div>
  </div>
 
  

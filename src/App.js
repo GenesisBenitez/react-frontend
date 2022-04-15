@@ -15,6 +15,7 @@ import UserPage from './components/users/UserPage';
 import Cart from './components/cart/Cart';
 import { SnackbarProvider } from 'material-ui-snackbar-provider'
 import Orders from './components/orders/Orders';
+import Product from './components/products/Product';
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
     <Route path="/" element={<Home/>}/>
     <Route path="/sellers/:id" element={<Seller/>}/>
     <Route path="/products" element={<AllProducts userId={userId} username={username} loggedIn={loggedIn}/>}/>
+    <Route path="/products/:id" element={<Product userId={userId} username={username} loggedIn={loggedIn}/>}/>
     <Route path="/register" element={<RegisterUser/>}/>
     <Route path="/login" element={<Login/>}/>
     <Route path="/profilePage/:id" element={<UserPage userId={userId} username={username}/>}/>

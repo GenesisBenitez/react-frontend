@@ -5,16 +5,11 @@ import { Link, useParams } from 'react-router-dom';
 import { useSnackbar } from 'material-ui-snackbar-provider';
 
 function AllProducts({userId,username,loggedIn}){
-    const cardStyle = {height: "300px"};
-    const descriptionStyle = {height: "110px", overflow: "scroll"}
-    const imgStyle = {height: "60%", overflow:"hidden"}
-    const containerStyle = {height: "500px", overflow:"scroll"}
-
+    const cardStyle = {height: "400px"};
+   
     const [products, setProducts] = useState([]);
-    const [quantity, setQuantity] = useState([]);
     const [productCategory, setProductCategory] = useState([]);
 
-    const snackbar = useSnackbar();
 
     const getData = () =>{
         axios.get("http://localhost:8080/products/getAllProductInformation",   {withCredentials: true})
@@ -23,6 +18,8 @@ function AllProducts({userId,username,loggedIn}){
             setProducts(response.data.products);
         }).catch(function(error){
             console.log(error);
+
+
         })
     };
     
@@ -36,8 +33,8 @@ function AllProducts({userId,username,loggedIn}){
         })
     };
 
-useEffect(()=> getData(), []);
-useEffect(()=> getProductCategories(), []);
+    useEffect(()=> getData(), []);
+    useEffect(()=> getProductCategories(), []);
 
     const filterByCategory = (e) =>{
         console.log(e.target.value);
@@ -45,6 +42,7 @@ useEffect(()=> getProductCategories(), []);
             getData();
         }else{
         let id = parseInt(e.target.value);
+
         axios.get(`http://localhost:8080/products/getProductsByCategory/${id}`)
             .then(function(response){
                 console.log(response);
@@ -55,81 +53,92 @@ useEffect(()=> getProductCategories(), []);
             })
         }
     }
-        
+    
+    const filterByPrice = (e) =>{
+        console.log(e.target.value);
+        if(e.target.value == "resetFilter"){
+            getData();
+        }else{
+        let id = parseInt(e.target.value);
+
+        axios.get(`http://localhost:8080/products/getProductsByPrice/${id}`)
+            .then(function(response){
+                console.log(response);
+                // snackbar.showMessage('Item successfully removed from cart!')
+                setProducts(response.data);
+            }).catch(function(error){
+                console.log(error);
+            })
+        }
+    }
+    
+    
     return(
-        <div>       
-            <div className="row gx-5 justify-content-center mt-4">
-                <div className="col-8 col-sm-10 col-md-8 col-lg-8 col-xl-8 mt-4" >
-                    <h1 className="display-5">Products</h1>
-                </div>
-            <div className="col-8 col-sm-10 col-md-8 col-lg-8 col-xl-8 mt-4" >
-                <div className="row mt-3 justify-content-end">
-                    <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-4">
-                        <label className="form-label">Filter by Category <BiFilterAlt/></label>
-                        <select required className="form-select form-inline" aria-label="Default select example" onChange={filterByCategory}>
-                        <option value="resetFilter">All Products</option>
-                        {productCategory.map((category, i)=>(
-                        <option value={category.id}>{category.name}</option>
-                        ))}
-                        </select>
-                    </div>
+        <div >
+            <div className="row container mt-4 justify-content-center">
+                <div className="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-11">
+                    <h4 className="display-6">Products</h4>
+                    <small>Browse products and add items to cart</small>
                 </div>
             </div>
-            <div className="row justify-content-center" >
-                {products.map((product, i)=>(
-                <div key={i} className="col-8 col-sm-10 col-md-8 col-lg-8 col-xl-8 mt-4">
-                    <div className="row border" style={cardStyle} >
-                        <div className="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 d-flex align-items-center" align="center">
-                            <div className="d-flex align-items-center justify-content-center" style={imgStyle}>
-                                <img className="mh-100 mw-90" src={product.product_img} className="card-img-top" alt="..." />
-                            </div>
-                        </div>  
-                    <div className="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                        <small className="d-block mt-4">{product.name}</small>
-                            <div style={descriptionStyle}>
-                                <small className="d-block mt-4 text-break">{product.description}</small>
-                            </div>
-                                <small className="d-block fw-bold">{product.quantity}<span className="text-danger fw-bold"> left</span></small> 
-                                <small className="d-block mt-2 fw-bold"><span className="text-success fw-bold">$</span>{product.price}</small> 
-                            <form onSubmit={(e)=>{ 
-                                e.preventDefault();
-                                let quantityValue = parseInt(quantity);
-                                console.log(product.id, userId, quantityValue);
-                                axios.post('http://localhost:8080/cart/addproducttocart', {
-                                    user_id: userId,
-                                    product_id: product.id,
-                                    quantity: quantityValue
-                                } , {withCredentials: true})
-                                .then(function(response){
-                                    console.log(response);
-                                    snackbar.showMessage('Item has been added to your cart');
-                                }).catch(function(error){
-                                    console.log(error);
-                                })
-                                }}
-                            >
-                                <div className="row mt-2">
-                                    <div className="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                                        <select required className="form-select" aria-label="Default select example" onChange={(e)=> setQuantity(e.target.value)}>
-                                            <option disabled defaultValue>QTY: 0</option>
-                                            {Array.from(Array(product.quantity), (error, i)=>{
-                                                if(i !== 0){
-                                                    return <option value={i}>{i}</option>
-                                                }
-                                            })}
-                                        </select>
-                                    </div>
-                                    <div className="col-7 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                                        <button  className="btn btn-dark">Add to cart</button>
-                                    </div>
+            <div className="row justify-content-center mt-4">
+                <div className="col-8 col-sm-8 col-md-5 col-lg-4 col-xl-3">
+                    <div className="container">
+                    <h4 className="lead mt-3">Filter</h4>
+                    </div>
+                    <div className="row container mt-5">
+                        <label className="form-label mt-4">Category <BiFilterAlt/></label>
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"  align="center">
+                            <select onChange={filterByCategory} class="form-select" multiple aria-label="multiple select example">
+                                <option value="resetFilter">All Products</option>
+                                {productCategory.map((category, i)=>(
+                                <option value={category.id}>{category.name}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                    </div>
+                    <div className="row container mt-4">
+                        <label className="form-label">Price <BiFilterAlt/></label>
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10"  align="center">
+                            <select onChange={filterByPrice} class="form-select" multiple aria-label="multiple select example">
+                                <option value="resetFilter">All Prices</option>
+                                <option value="5">Under $5</option>
+                                <option value="10">Under $10</option>
+                                <option value="20">Under $20</option>
+                                <option value="30">Under $30</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                <div className="col-12 col-sm-8 col-md-6 col-lg-8 col-xl-8">
+                <h4 className="lead mt-3">Results ({products.length})</h4>
+                    <small>Price and other details may vary based on product size and color</small>
+                    <div className="row container mt-4">
+                    {products.map((product, i)=>(
+                    <div className="col-8 col-sm-10 col-md-8 col-lg-6 col-xl-4 mt-2">
+                        <Link className="text-decoration-none link-dark" to={`/products/${product.id}`}>
+                        <div class="card border-light w-85 p-3" style={cardStyle}>
+                            <img src={product.product_img} height="180"  class="w-80 p-2" alt="..."/>
+                            <div class="card-body">
+                                <div className="h-25">
+                                    <h5 class="lead">{product.name}</h5>
                                 </div>
-                            </form>
-                        </div>    
+                                <div className="h-75 mt-4">
+                                    <small class="card-text fw-bold">{product.category}</small>
+                                    <p className="fw-bold"><span className="text-success fw-bold">$</span>{product.price}</p>
+                                    <small>{product.quantity} <span className="text-danger fw-bold">left</span></small>
+                                </div>
+                            </div>
+                        </div>
+                        </Link>
+                    </div>
+                    ))}
                     </div>
                 </div>
-            ))}
             </div>
-        </div>
         </div>
     )
 }
