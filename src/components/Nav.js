@@ -64,9 +64,9 @@ function Nav({userId, username, loggedIn}){
                 <li>
                 {userLink}
                 </li>
-                {/* <li>
-                <a type="button" onClick={() =>{
-                                        axios.get(`http://localhost:8080/signout`)
+                <li>
+                <a onClick={() =>{
+                                        axios.get(`http://localhost:8080/signout`, {withCredentials:TrustedScript})
                                         .then(function(response){
                                             console.log(response);
                                             snackbar.showMessage('User successfully logged out')
@@ -78,7 +78,7 @@ function Nav({userId, username, loggedIn}){
                 <svg className="bi d-block mx-auto mb-1" width="24" height="24"><BiLogOut size={25}/></svg>
                     Logout
                 </a>
-                </li> */}
+                </li>
 
             </ul>
             </div>
